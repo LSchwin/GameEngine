@@ -12,7 +12,9 @@ int main()
     bool quit = false;
 
     // Define a rectangle YAYYYYYY yip yip
-    SDL_FRect greenSquare{ 270, 190, 200, 200 };
+    //SDL_FRect greenSquare{ 270, 190, 200, 200 };
+
+
 
     while (!quit) {
         while (SDL_PollEvent(&e)) {
@@ -30,14 +32,25 @@ int main()
         
         for (int i = 0; i < 1000; ++i) {
             renderer.SetColor(rand() % 256, rand() % 256, rand() % 256);
-            renderer.DrawPoint(rand() % 1280, rand() % 1024);
+            renderer.DrawPoint(rand() % 1920, rand() % 1024);
         }
         //draw a buncha points
 
         renderer.SetColor(rand() % 256, rand() % 256, rand() % 256, rand() % 256);
-        // Set render draw color to green
-        renderer.DrawFillRect(40, 40, 50, 50);
+        
+        for (int i = 0; i < 20; ++i) {
+            int xRand = rand() % 1910;
+            int yRand = rand() % 1014;
+            renderer.SetColor(rand() % 256, rand() % 256, rand() % 256, rand() % 256);
+            renderer.DrawFillRect(xRand, yRand, xRand + 10, yRand + 10);
+        }
+        
         // Render the rectangle
+
+        for (int i = 0; i < 20; ++i) {
+            renderer.SetColor(rand() % 256, rand() % 256, rand() % 256, rand() % 256);
+            renderer.DrawLine(rand() % 1920, rand() % 1024, rand() % 1920, rand() % 1024);
+        }
         
         renderer.Present();
         // Render the screen
