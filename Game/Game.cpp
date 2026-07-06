@@ -1,64 +1,75 @@
 #include "Engine.h"
-#include <iostream>
 
-#include "SDL3/SDL.h"
+
+//#include "SDL3/SDL.h"
+
+using namespace nu;
 
 int main()
 {
+    // INITIALIZATION
     nu::Renderer renderer;
-    renderer.Initialize("Game Engine", 1920, 1024);
+    renderer.Initialize("Game Engine", 1920, 1024); //prof did 1280 instead of 1920
 
-    SDL_Event e;
+    //std::cout << sizeof(Vector2) << std::endl;
+
+    Vector2 vel{ 0.5f, 0.0f };
+
+    std::vector<Vector2> v;
+    for (int i = 0; i < 300; ++i)
+    {
+        Vector2 vec{ RandomFloat(1920) , RandomFloat(1024) };
+        v.push_back(vec);
+    }
+
+    // MAIN LOOP
     bool quit = false;
-
-    // Define a rectangle YAYYYYYY yip yip
-    //SDL_FRect greenSquare{ 270, 190, 200, 200 };
-
-
-
     while (!quit) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_EVENT_QUIT) {
+        // UPDATE
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) {
                 quit = true;
             }
         }
 
-        renderer.SetColor(0, 0, 0);
+        //RENDER
+        renderer.SetColor(0.0f, 0.0f, 0.0f);
         // Set render draw color to black
 
         renderer.Clear();
         // Clear the renderer
 
         
-        for (int i = 0; i < 1000; ++i) {
-            renderer.SetColor(rand() % 256, rand() % 256, rand() % 256);
-            renderer.DrawPoint(rand() % 1920, rand() % 1024);
+        for (size_t i = 0; i < v.size(); ++i) {
+            renderer.SetColor(RandomFloat(), RandomFloat(), RandomFloat());
+            v[i] = v[i] + vel;
+            renderer.DrawPoint((float)RandomInt(1920), (float)RandomInt(1024));
         }
         //draw a buncha points
 
-        renderer.SetColor(rand() % 256, rand() % 256, rand() % 256, rand() % 256);
+        renderer.SetColor(RandomFloat(), RandomFloat(), RandomFloat());
         
-        for (int i = 0; i < 20; ++i) {
-            int xRand = rand() % 1910;
-            int yRand = rand() % 1014;
-            renderer.SetColor(rand() % 256, rand() % 256, rand() % 256, rand() % 256);
+        /*for (int i = 0; i < 20; ++i) {
+            float xRand = (float)RandomInt(1910);
+            float yRand = (float)RandomInt(1014);
+            renderer.SetColor(RandomFloat(), RandomFloat(), RandomFloat());
             renderer.DrawFillRect(xRand, yRand, xRand + 10, yRand + 10);
-        }
-        
-        // Render the rectangle
+        }*/
+        // Render the rectangles
 
-        for (int i = 0; i < 20; ++i) {
-            renderer.SetColor(rand() % 256, rand() % 256, rand() % 256, rand() % 256);
-            renderer.DrawLine(rand() % 1920, rand() % 1024, rand() % 1920, rand() % 1024);
-        }
+        /*for (int i = 0; i < 20; ++i) {
+            renderer.SetColor(RandomFloat(), RandomFloat(), RandomFloat());
+            renderer.DrawLine((float)RandomInt(1920), (float)RandomInt(1024), (float)RandomInt(1920), (float)RandomInt(1024));
+        }*/
+        // Render the lines
         
         renderer.Present();
         // Render the screen
     }
 
+    // SHUTDOWN
     renderer.Shutdown();
 
     return 0;
-
-    //fnEngine();
 }

@@ -39,6 +39,11 @@ namespace nu
         SDL_SetRenderDrawColor(m_renderer, r, g, b, a);
     }
 
+    void Renderer::SetColor(float r, float g, float b, float a)
+    {
+        SDL_SetRenderDrawColorFloat(m_renderer, r, g, b, a);
+    }
+
     void Renderer::Clear()
     {
         SDL_RenderClear(m_renderer);
@@ -52,6 +57,7 @@ namespace nu
     void Renderer::DrawPoint(float x, float y)
     {
         SDL_SetRenderDrawColor(m_renderer, rand() % 256, rand() % 256, rand() % 256, rand() % 256);
+        SDL_RenderPoint(m_renderer, x, y);
     }
 
     void Renderer::DrawFillRect(float x, float y, float w, float h)
