@@ -8,7 +8,7 @@ namespace nu
 	class Input
 	{
 	public:
-		enum MouseButton
+		enum class MouseButton
 		{
 			Left = 1,
 			Middle,
@@ -26,9 +26,15 @@ namespace nu
 		bool GetKeyPressed(int key) const { return !m_prevKeyStates[key] && m_keyStates[key]; }
 		bool GetKeyReleased(int key) const { return m_prevKeyStates[key] && !m_keyStates[key]; }
 
-		bool GetMouseDown(MouseButton button) const { return false; }
-
 		Vector2 GetMousePosition() { return m_mousePosition; }
+
+		bool GetButtonDown(MouseButton button) const { return m_buttonStates & GetButtonBit(button); }
+		bool GetPrevButtonDown(MouseButton button) const { return m_prevButtonStates & GetButtonBit(button); }
+		bool GetButtonPressed(MouseButton button) const { return !GetPrevButtonDown(button) && GetButtonDown(button); }
+		bool GetButtonReleased(MouseButton button) const { return GetPrevButtonDown(button) && !GetButtonDown(button); }
+
+	private:
+		uint32_t GetButtonBit(MouseButton button) const;
 
 	private:
 		// keyboard
@@ -40,5 +46,6 @@ namespace nu
 		uint32_t m_prevButtonStates = 0;
 
 		Vector2 m_mousePosition{ 0, 0 };
+
 	};
 }
