@@ -5,6 +5,47 @@
 
 using namespace nu;
 
+struct Transform
+{
+    Vector2 position;
+    float rotation;
+    float scale;
+};
+
+class Actor
+{
+public:
+    Actor() = default;
+    Actor(const Transform& transform) : m_transform{ transform } {}
+
+    void Update(float dt)
+    {
+        m_transform.position += (m_velocity * dt);
+
+        m_transform.position.x = Wrap(0.0f, 1920.0f, m_transform.position.x);
+        m_transform.position.y = Wrap(0.0f, 1024.0f, m_transform.position.y);
+    }
+
+    void Draw(const Renderer& renderer) const
+    {
+        renderer.SetColor(0.0f, 200.0f, 50.0f);
+        renderer.DrawFillRect(m_transform.position.x - (m_transform.scale * 0.5f), m_transform.position.y - (m_transform.scale * 0.5f), m_transform.scale, m_transform.scale);
+    }
+
+    const Transform& GetTransform() const { return m_transform; }
+    void SetPosition(const Vector2& position) { m_transform.position = position; }
+    void SetRotation(float rotation) { m_transform.rotation = rotation; }
+    void SetScale(float scale) { m_transform.scale = scale; }
+
+    const Vector2& GetVelocity() const { return m_velocity; }
+    void SetVelocity(const Vector2& velocity) { m_velocity = velocity; }
+
+protected:
+    Transform m_transform;
+    Vector2 m_velocity{ 0, 0 };
+};
+
+
 int main()
 {
     // INITIALIZATION
@@ -16,11 +57,13 @@ int main()
 
     nu::Time time;
 
+    Actor player{ Transform{Vector2{640.0f, 512.0f}, 0.0f, 50.0f} };
+
     std::vector<Vector2> points;
+
     Vector2 position{ 640, 512 };
-
-
-    float speed = 400.0f;
+    float speed = 600.0f;
+    Vector2 velocity{ 0.0f, 0.0f };
 
     // MAIN LOOP
     bool quit = false;
@@ -49,46 +92,66 @@ int main()
         if (input.GetButtonPressed(Input::MouseButton::Middle)) std::cout << "button pwessed\n";
         */
         
-        if (input.GetButtonDown(Input::MouseButton::Left))
+        if (input.GetButtonPressed(Input::MouseButton::Left))
         {
             points.push_back(input.GetMousePosition());
         }
 
-        Vector2 velocity{ 0.0f, 0.0f };
-        if (input.GetKeyDown(SDL_SCANCODE_A)) velocity.x = -speed;
-        if (input.GetKeyDown(SDL_SCANCODE_D)) velocity.x = speed;
-        if (input.GetKeyDown(SDL_SCANCODE_W)) velocity.y = -speed;
-        if (input.GetKeyDown(SDL_SCANCODE_S)) velocity.y = speed;
-        position += (velocity * time.GetDeltaTime());
+        if (input.GetButtonDown(Input::MouseButton::Left))
+        {
+            if (points.empty())
+            {
+                points.push_back(input.GetMousePosition());
+            }
+            else 
+            {
+                Vector2 v = points.back() - input.GetMousePosition();
+                if (v.Length() > 30.0f)
+                {
+                points.push_back(input.GetMousePosition());
+                }
+            }
+        }
+
+        if (input.GetButtonPressed(Input::MouseButton::Right))
+        {
+            if (!points.empty()) points.pop_back();
+        }
+
+        Vector2 force{ 0.0f, 0.0f };
+        if (input.GetKeyDown(SDL_SCANCODE_A)) force.x = -speed;
+        if (input.GetKeyDown(SDL_SCANCODE_D)) force.x = speed;
+        if (input.GetKeyDown(SDL_SCANCODE_W)) force.y = -speed;
+        if (input.GetKeyDown(SDL_SCANCODE_S)) force.y = speed;
+
+        player.SetVelocity(player.GetVelocity() + (force * time.GetDeltaTime()));
+
+        player.Update(time.GetDeltaTime());
+
+        //velocity += (force * time.GetDeltaTime());
+        //position += (velocity * time.GetDeltaTime());
+         
+        //position.x = Wrap(0.0f, 1920.0f, position.x);
+        //position.y = Wrap(0.0f, 1024.0f, position.y);
+
 
         //RENDER
         renderer.SetColor(0.0f, 0.0f, 0.0f); // Set render draw color to black
         renderer.Clear();
 
 
-        for (size_t i = 0; i < points.size(); ++i) {
-            renderer.SetColor(RandomFloat(), RandomFloat(), RandomFloat());
-            //points[i] = points[i] + vel;
-            renderer.DrawFillRect(points[i].x, points[i].y, 10, 10);
+
+        for (int i = 0; i < (int)points.size() - 1; ++i) {
+            renderer.SetColor((float)255, (float)255, (float)255);
+            //renderer.DrawFillRect(points[i].x, points[i].y, 10, 10);
+            renderer.DrawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
         }
         //draw a buncha points
 
-        renderer.SetColor(RandomFloat(), RandomFloat(), RandomFloat());
-        renderer.DrawFillRect(position.x - 20, position.y - 20, 40, 40);
-
-        /*for (int i = 0; i < 20; ++i) {
-            float xRand = (float)RandomInt(1910);
-            float yRand = (float)RandomInt(1014);
-            renderer.SetColor(RandomFloat(), RandomFloat(), RandomFloat());
-            renderer.DrawFillRect(xRand, yRand, xRand + 10, yRand + 10);
-        }*/
-        // Render the rectangles
-
-        /*for (int i = 0; i < 20; ++i) {
-            renderer.SetColor(RandomFloat(), RandomFloat(), RandomFloat());
-            renderer.DrawLine((float)RandomInt(1920), (float)RandomInt(1024), (float)RandomInt(1920), (float)RandomInt(1024));
-        }*/
-        // Render the lines
+        // character
+        player.Draw(renderer);
+        //renderer.SetColor(0.0f, 200.0f, 50.0f);
+        //renderer.DrawFillRect(position.x - 20, position.y - 20, 40, 40);
 
         // TEST CODE END
         
