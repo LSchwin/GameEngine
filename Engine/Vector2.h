@@ -33,10 +33,10 @@ namespace nu
 		Vector2 operator *= (const Vector2& v) { this->x *= v.x; this->y *= v.y; return *this; }
 		Vector2 operator /= (const Vector2& v) { this->x /= v.x; this->y /= v.y; return *this; }
 
-		Vector2 operator += (float v) { this->x += x; this->y += y; return *this; }
-		Vector2 operator -= (float v) { this->x -= x; this->y -= y; return *this; }
-		Vector2 operator *= (float v) { this->x *= x; this->y *= y; return *this; }
-		Vector2 operator /= (float v) { this->x /= x; this->y /= y; return *this; }
+		Vector2 operator += (float v) { this->x += v; this->y += v; return *this; }
+		Vector2 operator -= (float v) { this->x -= v; this->y -= v; return *this; }
+		Vector2 operator *= (float v) { this->x *= v; this->y *= v; return *this; }
+		Vector2 operator /= (float v) { this->x /= v; this->y /= v; return *this; }
 
 		float LengthSqr() const { return (x * x) + (y * y); } //this in vec3
 		float Length() const { return std::sqrt(LengthSqr()); } //this in vec3
@@ -45,7 +45,7 @@ namespace nu
 
 		float Angle() const { return std::atan2(this->y, this->x); }
 		float AngleBetween(const Vector2& v) const { return std::acos(Dot(v)); }
-		Vector2 Rotate(const Vector2&, float radians)
+		Vector2 Rotate(const Vector2& v, float radians)
 		{
 			/*
 			Vector2 v;
