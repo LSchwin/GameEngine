@@ -20,8 +20,14 @@ namespace nu
 		void DrawFillRect(float x, float y, float w, float h) const;
 		void DrawRect(float x, float y, float w, float h) const;
 		void DrawLine(float x1, float y1, float x2, float y2) const;
+
+		int GetWidth() { return m_width;  }
+		int GetHeight() { return m_height;  }
 	private:
 		SDL_Window* m_window = nullptr;
 		SDL_Renderer* m_renderer = nullptr;
+
+		int m_width = 0;
+		int m_height = 0;
 	};
 }
