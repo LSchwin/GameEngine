@@ -38,9 +38,9 @@ namespace nu
 		Vector3 operator *= (float v) { this->x *= v; this->y *= v; this->z *= v; return *this; }
 		Vector3 operator /= (float v) { this->x /= v; this->y /= v; this->z /= v; return *this; } // all v's were respective variable (x, y), accident?
 
-		float LengthSqr() const { return (x * x) + (y * y); } // did I need to change this??
+		float LengthSqr() const { return (x * x) + (y * y) + (z * z); } // changed just in case
 		float Length() const { return std::sqrt(LengthSqr()); } 
 		Vector3 Normalized() const { return (*this) / Length(); } 
-		float Dot(const Vector3& v) const { return (this->x * v.x) + (this->y * v.y); }
+		float Dot(const Vector3& v) const { return (this->x * v.x) + (this->y * v.y) + (this->z * v.z); } // changed just in case
 	};
 }
