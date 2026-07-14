@@ -16,7 +16,9 @@ int main()
 
     nu::Time time;
 
-    Actor player{ Transform{Vector2{640.0f, 512.0f}, 0.0f, 50.0f} };
+  
+    Mesh mesh{ { Vector2{-3, 3}, Vector2{3, 3}, Vector2{0, 0} }, Color{0.0f, 0.0f, 1.0f} };
+    Actor player{ Transform{Vector2{640.0f, 512.0f}, 0.0f, 50.0f}, std::vector<Mesh>{ mesh } };
 
     std::vector<Vector2> points;
 
