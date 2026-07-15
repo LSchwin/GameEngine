@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Transform.h"
 #include "Model.h"
+#include "MathUtils.h"
 
 #include <iostream>
 #include "Input.h"
@@ -101,6 +102,9 @@ namespace nu
                 //convert to world space
                 v1 *= transform.scale;
                 v2 *= transform.scale;
+
+                v1 = v1.Rotate(transform.rotation * DegToRad);
+                v2 = v2.Rotate(transform.rotation * DegToRad);
 
                 v1 += transform.position;
                 v2 += transform.position;

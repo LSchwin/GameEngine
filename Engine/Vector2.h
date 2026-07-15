@@ -45,7 +45,7 @@ namespace nu
 
 		float Angle() const { return std::atan2(this->y, this->x); }
 		float AngleBetween(const Vector2& v) const { return std::acos(Dot(v)); }
-		Vector2 Rotate(const Vector2& v, float radians)
+		Vector2 Rotate(float radians)
 		{
 			/*
 			Vector2 v;
@@ -53,8 +53,8 @@ namespace nu
 			v.y = std::sin(radians);
 			*/
 
-			float x = v.x * std::cos(radians) - v.y * std::sin(radians);
-			float y = v.x * std::sin(radians) + v.y * std::cos(radians);
+			float x = this->x * std::cos(radians) - this->y * std::sin(radians);
+			float y = this->x * std::sin(radians) + this->y * std::cos(radians);
 
 			return {x, y};
 		}
