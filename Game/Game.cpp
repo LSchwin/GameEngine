@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "Enemy.h"
 
+#include <fmod.hpp>
+
 //#include "SDL3/SDL.h"
 
 using namespace nu;
@@ -11,30 +13,63 @@ int main()
     // INITIALIZATION
     engine.Initialize();
 
+
+    // create audio system
+    FMOD::System* audio;
+    FMOD::System_Create(&audio);
+
+    void* extradriverdata = nullptr;
+    audio->init(32, FMOD_INIT_NORMAL, extradriverdata);
+
+    FMOD::Sound* soundTest = nullptr;
+    audio->createSound("test.wav", FMOD_DEFAULT, 0, &soundTest);
+
+    std::vector<FMOD::Sound*> sounds;
+
+    FMOD::Sound* sound = nullptr;
+    audio->createSound("cowbell.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("snare.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("clap.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("bass.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    audio->createSound("open-hat.wav", FMOD_DEFAULT, 0, &sound);
+    sounds.push_back(sound);
+
+    
+
+    audio->playSound(soundTest, 0, false, nullptr);
+
   
     //Mesh mesh{ { Vector2{-3, 3}, Vector2{3, 3}, Vector2{0, 0} }, Color{0.0f, 0.0f, 1.0f} };
     
     //make each vector a (-3 for each????)
     Mesh mesh{ 
         {
-        Vector2{3, 0},
-        Vector2{5, 0},
-        Vector2{5, 1},
-        Vector2{3, 1},
-        Vector2{4, 2},
-        Vector2{7, 2},
-        Vector2{7, 4},
-        Vector2{4, 4},
-        Vector2{3, 5},
-        Vector2{5, 5},
-        Vector2{5, 6},
-        Vector2{3, 6},
-        Vector2{1, 4},
-        Vector2{0, 4},
-        Vector2{1, 3},
-        Vector2{0, 2},
-        Vector2{1, 2},
-        Vector2{3, 0} },
+        Vector2{3 - 3, 0 - 3},
+        Vector2{5 - 3, 0 - 3},
+        Vector2{5 - 3, 1 - 3},
+        Vector2{3 - 3, 1 - 3},
+        Vector2{4 - 3, 2 - 3},
+        Vector2{7 - 3, 2 - 3},
+        Vector2{7 - 3, 4 - 3},
+        Vector2{4 - 3, 4 - 3},
+        Vector2{3 - 3, 5 - 3},
+        Vector2{5 - 3, 5 - 3},
+        Vector2{5 - 3, 6 - 3},
+        Vector2{3 - 3, 6 - 3},
+        Vector2{1 - 3, 4 - 3},
+        Vector2{0 - 3, 4 - 3},
+        Vector2{1 - 3, 3 - 3},
+        Vector2{0 - 3, 2 - 3},
+        Vector2{1 - 3, 2 - 3},
+        Vector2{3 - 3, 0 - 3} },
         Color{0.0f, 0.0f, 1.0f}
     };
     Model model{ std::vector<Mesh>{ mesh } };
@@ -51,6 +86,7 @@ int main()
     Player* player = new Player{playerDesc};
     scene.AddActor(player);
 
+    /*
     for (int i = 0; i < 20; ++i)
     {
         EnemyDesc enemyDesc;
@@ -63,6 +99,7 @@ int main()
         Enemy* enemy = new Enemy{enemyDesc};
         scene.AddActor(enemy);
     }
+    */
 
     std::vector<Vector2> points;
 
@@ -83,6 +120,7 @@ int main()
             }
         }
         engine.Update();
+        audio->update(); //audio test
 
         float dt = engine.GetTime().GetDeltaTime();
   
@@ -115,6 +153,35 @@ int main()
         {
             if (!points.empty()) points.pop_back();
         }
+
+
+        //sound test
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_1))
+        {
+            audio->playSound(sounds[0], nullptr, false, nullptr);
+        }
+
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_2))
+        {
+            audio->playSound(sounds[1], nullptr, false, nullptr);
+        }
+
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_3))
+        {
+            audio->playSound(sounds[2], nullptr, false, nullptr);
+        }
+
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_4))
+        {
+            audio->playSound(sounds[3], nullptr, false, nullptr);
+        }
+
+        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_5))
+        {
+            audio->playSound(sounds[4], nullptr, false, nullptr);
+        }
+        //sound test end
+
 
         //RENDER
         engine.GetRenderer().SetColor(0.0f, 0.0f, 0.0f); // Set render draw color to black
