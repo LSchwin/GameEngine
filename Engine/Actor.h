@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "Model.h"
 #include <string>
+#include <vector>
 
 namespace nu
 {
@@ -47,6 +48,8 @@ namespace nu
 
         const std::string& GetName() const { return m_name;  }
         const std::string& GetTag() const { return m_tag;  }
+
+        std::vector<Model> m_modelList;
 
     protected:
         std::string m_name;

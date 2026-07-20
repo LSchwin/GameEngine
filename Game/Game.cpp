@@ -52,27 +52,38 @@ int main()
     //make each vector a (-3 for each????)
     Mesh mesh{ 
         {
-        Vector2{3 - 3, 0 - 3},
-        Vector2{5 - 3, 0 - 3},
-        Vector2{5 - 3, 1 - 3},
-        Vector2{3 - 3, 1 - 3},
-        Vector2{4 - 3, 2 - 3},
-        Vector2{7 - 3, 2 - 3},
-        Vector2{7 - 3, 4 - 3},
-        Vector2{4 - 3, 4 - 3},
-        Vector2{3 - 3, 5 - 3},
-        Vector2{5 - 3, 5 - 3},
-        Vector2{5 - 3, 6 - 3},
-        Vector2{3 - 3, 6 - 3},
-        Vector2{1 - 3, 4 - 3},
-        Vector2{0 - 3, 4 - 3},
-        Vector2{1 - 3, 3 - 3},
-        Vector2{0 - 3, 2 - 3},
-        Vector2{1 - 3, 2 - 3},
-        Vector2{3 - 3, 0 - 3} },
-        Color{0.0f, 0.0f, 1.0f}
+        Vector2{ 4, 0 },
+        Vector2{ 0, -1 },
+        Vector2{ -1, 0 },
+        Vector2{ 0, 1 },
+        Vector2{ 4, 0 } 
+        },
+        Color{ 0.7f, 0.6f, 0.6f }
     };
-    Model model{ std::vector<Mesh>{ mesh } };
+
+    Mesh mesh2{
+        {
+        Vector2{ -1, 1 },
+        Vector2{ -2, 1 },
+        Vector2{ -3, 3 },
+        Vector2{ -1, 2 },
+        Vector2{ -1, 1 },
+        },
+        Color{  0.7f, 0.1f, 0.1f  }
+    };
+
+    Mesh mesh3{
+        {
+        Vector2{ -1, -1 },
+        Vector2{ -2, -1 },
+        Vector2{ -3, -3 },
+        Vector2{ -1, -2 },
+        Vector2{ -1, -1 },
+        },
+        Color{  0.7f, 0.1f, 0.1f  }
+    };
+
+    Model model{ std::vector<Mesh>{ mesh, mesh2, mesh3 } };
 
     Scene scene;
 
@@ -120,7 +131,7 @@ int main()
             }
         }
         engine.Update();
-        audio->update(); //audio test
+        audio->update(); //required
 
         float dt = engine.GetTime().GetDeltaTime();
   
