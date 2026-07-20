@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "Player.h"
+#include "Enemy.h"
 
 //#include "SDL3/SDL.h"
 
@@ -12,6 +13,8 @@ int main()
 
   
     //Mesh mesh{ { Vector2{-3, 3}, Vector2{3, 3}, Vector2{0, 0} }, Color{0.0f, 0.0f, 1.0f} };
+    
+    //make each vector a (-3 for each????)
     Mesh mesh{ 
         {
         Vector2{3, 0},
@@ -34,7 +37,32 @@ int main()
         Vector2{3, 0} },
         Color{0.0f, 0.0f, 1.0f}
     };
-    Player player{800.0f, Transform{Vector2{640.0f, 512.0f}, 0.0f, 20.0f}, std::vector<Mesh>{ mesh } };
+    Model model{ std::vector<Mesh>{ mesh } };
+
+    Scene scene;
+
+    PlayerDesc playerDesc;
+    playerDesc.name = "Player";
+    playerDesc.model = model;
+    playerDesc.transform = Transform{ Vector2{640.0f, 512.0f}, 0.0f, 20.0f };
+    playerDesc.velocity = Vector2{ 0.0f, 0.0f };
+    playerDesc.speed = 800.0f;
+
+    Player* player = new Player{playerDesc};
+    scene.AddActor(player);
+
+    for (int i = 0; i < 20; ++i)
+    {
+        EnemyDesc enemyDesc;
+        enemyDesc.name = "Enemy";
+        enemyDesc.model = model;
+        enemyDesc.transform = Transform{ Vector2{nu::RandomFloat((float)nu::engine.GetRenderer().GetWidth()), nu::RandomFloat((float)nu::engine.GetRenderer().GetWidth())}, 90.0f, 10.0f };
+        enemyDesc.velocity = Vector2{ 0.0f, 0.0f };
+        enemyDesc.speed = 800.0f;
+
+        Enemy* enemy = new Enemy{enemyDesc};
+        scene.AddActor(enemy);
+    }
 
     std::vector<Vector2> points;
 
@@ -56,8 +84,11 @@ int main()
         }
         engine.Update();
 
-        player.SetRotation(player.GetTransform().rotation + (90.0f * engine.GetTime().GetDeltaTime())); //90 degrees per second
-        player.Update(engine.GetTime().GetDeltaTime());
+        float dt = engine.GetTime().GetDeltaTime();
+  
+        //player.Update(dt);
+        //enemy.Update(dt);
+        scene.Update(dt);
         
         if (engine.GetInput().GetButtonPressed(Input::MouseButton::Left)) //paint
         {
@@ -88,19 +119,17 @@ int main()
         //RENDER
         engine.GetRenderer().SetColor(0.0f, 0.0f, 0.0f); // Set render draw color to black
         engine.GetRenderer().Clear();
-
-
-
+        
         for (int i = 0; i < (int)points.size() - 1; ++i) {
             engine.GetRenderer().SetColor((float)255, (float)255, (float)255);
-            //renderer.DrawFillRect(points[i].x, points[i].y, 10, 10);
             engine.GetRenderer().DrawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
         }
-        //draw a buncha points
 
-        // character
-        player.Draw(engine.GetRenderer());
+        scene.Draw(engine.GetRenderer());
+
         // TEST CODE END
+
+        
         
         engine.GetRenderer().Present(); // Render the screen
     }
