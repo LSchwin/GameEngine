@@ -1,0 +1,75 @@
+#include "Assets.h"
+
+using namespace nu;
+
+namespace assets
+{
+    Mesh meshPlayer{
+        {
+        Vector2{ 4, 0 },
+        Vector2{ 0, -1 },
+        Vector2{ -1, 0 },
+        Vector2{ 0, 1 },
+        Vector2{ 4, 0 }
+        },
+        Color{ 0.7f, 0.6f, 0.6f }
+    };
+
+    Mesh meshPlayer2{
+        {
+        Vector2{ -1, 1 },
+        Vector2{ -2, 1 },
+        Vector2{ -3, 3 },
+        Vector2{ -1, 2 },
+        Vector2{ -1, 1 },
+        },
+        Color{  0.7f, 0.1f, 0.1f  }
+    };
+
+    Mesh meshPlayer3{
+        {
+        Vector2{ -1, -1 },
+        Vector2{ -2, -1 },
+        Vector2{ -3, -3 },
+        Vector2{ -1, -2 },
+        Vector2{ -1, -1 },
+        },
+        Color{  0.7f, 0.1f, 0.1f  }
+    };
+	Model playerModel{ std::vector<Mesh>{ meshPlayer, meshPlayer2, meshPlayer3 } };
+
+
+    Mesh meshEnemy{
+        {
+        Vector2{ 4, 0 },
+        Vector2{ 0, -1 },
+        Vector2{ -1, 0 },
+        Vector2{ 0, 1 },
+        Vector2{ 4, 0 }
+        },
+        Color{ 30.0f, 0.6f, 0.6f }
+    };
+
+    Mesh meshEnemy2{
+        {
+        Vector2{ -1, 1 },
+        Vector2{ -2, 1 },
+        Vector2{ -3, 3 },
+        Vector2{ -1, 2 },
+        Vector2{ -1, 1 },
+        },
+        Color{  30.0f, 0.1f, 0.1f  }
+    };
+
+    Mesh meshEnemy3{
+        {
+        Vector2{ -1, -1 },
+        Vector2{ -2, -1 },
+        Vector2{ -3, -3 },
+        Vector2{ -1, -2 },
+        Vector2{ -1, -1 },
+        },
+        Color{  30.0f, 0.1f, 0.1f  }
+    };
+    Model enemyModel{ std::vector<Mesh>{ meshEnemy, meshEnemy2, meshEnemy3 } };
+}

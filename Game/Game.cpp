@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Assets.h"
 
 #include <fmod.hpp>
 
@@ -11,7 +12,7 @@ using namespace nu;
 int main()
 {
     // INITIALIZATION
-    engine.Initialize();
+    Engine::Get().Initialize();
 
 
     // create audio system
@@ -50,46 +51,13 @@ int main()
     //Mesh mesh{ { Vector2{-3, 3}, Vector2{3, 3}, Vector2{0, 0} }, Color{0.0f, 0.0f, 1.0f} };
     
     //make each vector a (-3 for each????)
-    Mesh mesh{ 
-        {
-        Vector2{ 4, 0 },
-        Vector2{ 0, -1 },
-        Vector2{ -1, 0 },
-        Vector2{ 0, 1 },
-        Vector2{ 4, 0 } 
-        },
-        Color{ 0.7f, 0.6f, 0.6f }
-    };
-
-    Mesh mesh2{
-        {
-        Vector2{ -1, 1 },
-        Vector2{ -2, 1 },
-        Vector2{ -3, 3 },
-        Vector2{ -1, 2 },
-        Vector2{ -1, 1 },
-        },
-        Color{  0.7f, 0.1f, 0.1f  }
-    };
-
-    Mesh mesh3{
-        {
-        Vector2{ -1, -1 },
-        Vector2{ -2, -1 },
-        Vector2{ -3, -3 },
-        Vector2{ -1, -2 },
-        Vector2{ -1, -1 },
-        },
-        Color{  0.7f, 0.1f, 0.1f  }
-    };
-
-    Model model{ std::vector<Mesh>{ mesh, mesh2, mesh3 } };
+    
 
     Scene scene;
 
     PlayerDesc playerDesc;
     playerDesc.name = "Player";
-    playerDesc.model = model;
+    playerDesc.model = assets::playerModel;
     playerDesc.transform = Transform{ Vector2{640.0f, 512.0f}, 0.0f, 20.0f };
     playerDesc.velocity = Vector2{ 0.0f, 0.0f };
     playerDesc.speed = 800.0f;
@@ -97,20 +65,20 @@ int main()
     Player* player = new Player{playerDesc};
     scene.AddActor(player);
 
-    /*
+    
     for (int i = 0; i < 20; ++i)
     {
         EnemyDesc enemyDesc;
         enemyDesc.name = "Enemy";
-        enemyDesc.model = model;
-        enemyDesc.transform = Transform{ Vector2{nu::RandomFloat((float)nu::engine.GetRenderer().GetWidth()), nu::RandomFloat((float)nu::engine.GetRenderer().GetWidth())}, 90.0f, 10.0f };
+        enemyDesc.model = assets::enemyModel;
+        enemyDesc.transform = Transform{ Vector2{nu::RandomFloat((float)nu::Engine::Get().GetRenderer().GetWidth()), nu::RandomFloat((float)nu::Engine::Get().GetRenderer().GetWidth())}, 90.0f, 10.0f };
         enemyDesc.velocity = Vector2{ 0.0f, 0.0f };
         enemyDesc.speed = 800.0f;
 
         Enemy* enemy = new Enemy{enemyDesc};
         scene.AddActor(enemy);
     }
-    */
+    
 
     std::vector<Vector2> points;
 
@@ -130,64 +98,64 @@ int main()
                 quit = true;
             }
         }
-        engine.Update();
+        Engine::Get().Update();
         audio->update(); //required
 
-        float dt = engine.GetTime().GetDeltaTime();
+        float dt = Engine::Get().GetTime().GetDeltaTime();
   
         //player.Update(dt);
         //enemy.Update(dt);
         scene.Update(dt);
         
-        if (engine.GetInput().GetButtonPressed(Input::MouseButton::Left)) //paint
+        if (Engine::Get().GetInput().GetButtonPressed(Input::MouseButton::Left)) //paint
         {
-            points.push_back(engine.GetInput().GetMousePosition());
+            points.push_back(Engine::Get().GetInput().GetMousePosition());
         }
 
-        if (engine.GetInput().GetButtonDown(Input::MouseButton::Left)) //paint
+        if (Engine::Get().GetInput().GetButtonDown(Input::MouseButton::Left)) //paint
         {
             if (points.empty())
             {
-                points.push_back(engine.GetInput().GetMousePosition());
+                points.push_back(Engine::Get().GetInput().GetMousePosition());
             }
             else 
             {
-                Vector2 v = points.back() - engine.GetInput().GetMousePosition();
+                Vector2 v = points.back() - Engine::Get().GetInput().GetMousePosition();
                 if (v.Length() > 30.0f)
                 {
-                points.push_back(engine.GetInput().GetMousePosition());
+                points.push_back(Engine::Get().GetInput().GetMousePosition());
                 }
             }
         }
 
-        if (engine.GetInput().GetButtonPressed(Input::MouseButton::Right)) //paint
+        if (Engine::Get().GetInput().GetButtonPressed(Input::MouseButton::Right)) //paint
         {
             if (!points.empty()) points.pop_back();
         }
 
 
         //sound test
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_1))
+        if (Engine::Get().GetInput().GetKeyPressed(SDL_SCANCODE_1))
         {
             audio->playSound(sounds[0], nullptr, false, nullptr);
         }
 
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_2))
+        if (Engine::Get().GetInput().GetKeyPressed(SDL_SCANCODE_2))
         {
             audio->playSound(sounds[1], nullptr, false, nullptr);
         }
 
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_3))
+        if (Engine::Get().GetInput().GetKeyPressed(SDL_SCANCODE_3))
         {
             audio->playSound(sounds[2], nullptr, false, nullptr);
         }
 
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_4))
+        if (Engine::Get().GetInput().GetKeyPressed(SDL_SCANCODE_4))
         {
             audio->playSound(sounds[3], nullptr, false, nullptr);
         }
 
-        if (engine.GetInput().GetKeyPressed(SDL_SCANCODE_5))
+        if (Engine::Get().GetInput().GetKeyPressed(SDL_SCANCODE_5))
         {
             audio->playSound(sounds[4], nullptr, false, nullptr);
         }
@@ -195,25 +163,25 @@ int main()
 
 
         //RENDER
-        engine.GetRenderer().SetColor(0.0f, 0.0f, 0.0f); // Set render draw color to black
-        engine.GetRenderer().Clear();
+        Engine::Get().GetRenderer().SetColor(0.0f, 0.0f, 0.0f); // Set render draw color to black
+        Engine::Get().GetRenderer().Clear();
         
         for (int i = 0; i < (int)points.size() - 1; ++i) {
-            engine.GetRenderer().SetColor((float)255, (float)255, (float)255);
-            engine.GetRenderer().DrawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+            Engine::Get().GetRenderer().SetColor((float)255, (float)255, (float)255);
+            Engine::Get().GetRenderer().DrawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
         }
 
-        scene.Draw(engine.GetRenderer());
+        scene.Draw(Engine::Get().GetRenderer());
 
         // TEST CODE END
 
         
         
-        engine.GetRenderer().Present(); // Render the screen
+        Engine::Get().GetRenderer().Present(); // Render the screen
     }
 
     // SHUTDOWN
-    engine.Shutdown();
+    Engine::Get().Shutdown();
 
     return 0;
 }
