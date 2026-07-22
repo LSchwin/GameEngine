@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "Input.h"
 #include "GameTime.h"
+#include "File.h"
 
 #include "Actor.h"
 #include "Scene.h"
