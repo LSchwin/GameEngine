@@ -96,14 +96,9 @@ int main()
     audio->createSound("open-hat.wav", FMOD_DEFAULT, 0, &sound);
     sounds.push_back(sound);
 
-    
-
     audio->playSound(soundTest, 0, false, nullptr);
-
+    //audio test end
   
-    //Mesh mesh{ { Vector2{-3, 3}, Vector2{3, 3}, Vector2{0, 0} }, Color{0.0f, 0.0f, 1.0f} };
-    
-    //make each vector a (-3 for each????)
     
 
     Scene scene;
@@ -113,7 +108,8 @@ int main()
     playerDesc.model = assets::playerModel;
     playerDesc.transform = Transform{ Vector2{640.0f, 512.0f}, 0.0f, 20.0f };
     playerDesc.velocity = Vector2{ 0.0f, 0.0f };
-    playerDesc.speed = 800.0f;
+    playerDesc.damping = 3.0f;
+    playerDesc.speed = 2000.0f;
 
     Player* player = new Player{playerDesc};
     scene.AddActor(player);
@@ -126,7 +122,8 @@ int main()
         enemyDesc.model = assets::enemyModel;
         enemyDesc.transform = Transform{ Vector2{nu::RandomFloat((float)nu::Engine::Get().GetRenderer().GetWidth()), nu::RandomFloat((float)nu::Engine::Get().GetRenderer().GetWidth())}, 90.0f, 10.0f };
         enemyDesc.velocity = Vector2{ 0.0f, 0.0f };
-        enemyDesc.speed = 800.0f;
+        enemyDesc.damping = 3.0f;
+        enemyDesc.speed = RandomFloat(1000.0f, 2000.0f);
 
         Enemy* enemy = new Enemy{enemyDesc};
         scene.AddActor(enemy);

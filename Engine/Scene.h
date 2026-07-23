@@ -21,6 +21,7 @@ namespace nu
 
 	private:
 		std::vector<Actor*> m_actors;
+		std::vector<Actor*> m_pendingActors;
 	};
 
 	template<typename T>

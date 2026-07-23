@@ -3,7 +3,7 @@
 
 struct PlayerDesc : public nu::ActorDesc
 {
-    float speed;
+    float speed{ 2000.0f };
 };
 
 class Player : public nu::Actor
@@ -33,5 +33,5 @@ public:
 
 private:
 	int m_ammo = 0;
-    float m_speed = 800.0f;
+    float m_speed = 2000.0f;
 };
